@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>What's Your Christmas Aura?</title>
+<meta name="description" content="A cozy little Christmas personality quiz 🎄">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink-50:#fff3f7;--pink-100:#ffe1ec;--pink-200:#ffc2d8;--pink-400:#ff7aa8;--pink-500:#f2508a;--pink-700:#b8245c;
+  --berry:#8e1640;--pine:#2f6b4f;--gold:#d9a441;--ink:#4a1830;--card:#ffffffee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Quicksand,system-ui,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 800px at 20% -10%,#ffd6e6 0%,transparent 60%),
+             radial-gradient(900px 700px at 110% 110%,#ffc9dc 0%,transparent 55%),
+             linear-gradient(160deg,#ffeef5 0%,#ffd9e8 55%,#ffc4da 100%);
+  min-height:100vh;overflow-x:hidden;
+}
+#sky{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.flake{position:absolute;top:-40px;animation:fall linear infinite;opacity:.85;user-select:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:28px 16px 40px;min-height:100vh;display:flex;flex-direction:column}
+header{text-align:center;margin-bottom:18px}
+.garland{font-size:22px;letter-spacing:6px}
+h1{font-family:Fraunces,serif;font-weight:800;font-size:clamp(28px,7vw,40px);color:var(--berry);line-height:1.1;margin-top:6px}
+.sub{color:var(--pink-700);font-weight:600;margin-top:6px}
+.card{background:var(--card);backdrop-filter:blur(6px);border-radius:28px;padding:26px 22px;
+  box-shadow:0 18px 40px -18px #b8245c66,0 2px 0 #fff inset;border:2px solid #fff;position:relative}
+.card:before{content:"🎀";position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:30px}
+.progress{height:12px;background:var(--pink-100);border-radius:99px;overflow:hidden;margin:4px 0 16px;
+  background-image:repeating-linear-gradient(45deg,#fff6 0 8px,transparent 8px 16px)}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink-400),var(--pink-500),#e63946);
+  border-radius:99px;transition:width .4s ease;background-size:200% 100%;animation:shine 3s linear infinite}
+@keyframes shine{to{background-position:-200% 0}}
+.count{font-size:13px;font-weight:700;color:var(--pink-700);text-align:center;letter-spacing:.06em;text-transform:uppercase}
+.q{font-family:Fraunces,serif;font-weight:600;font-size:clamp(20px,5vw,24px);line-height:1.3;text-align:center;margin:8px 0 18px;color:var(--berry)}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;font-weight:600;font-size:16px;color:var(--ink);
+  background:#fff;border:2px solid var(--pink-200);border-radius:18px;padding:14px 16px;cursor:pointer;
+  transition:transform .12s ease,border-color .12s,background .12s,box-shadow .12s}
+.opt .em{font-size:24px;flex:none;width:30px;text-align:center}
+.opt:hover{border-color:var(--pink-400);transform:translateY(-1px);box-shadow:0 6px 14px -8px #f2508a88}
+.opt.picked{background:var(--pink-100);border-color:var(--pink-500);transform:scale(.98)}
+.opt:focus-visible{outline:3px solid var(--pink-500);outline-offset:2px}
+textarea{width:100%;min-height:110px;font:inherit;font-size:16px;border:2px solid var(--pink-200);border-radius:18px;padding:14px;color:var(--ink);resize:vertical;background:#fff}
+textarea:focus{outline:none;border-color:var(--pink-500)}
+.btn{display:block;width:100%;margin-top:14px;font:inherit;font-weight:700;font-size:17px;color:#fff;border:none;border-radius:99px;padding:15px;
+  background:linear-gradient(135deg,var(--pink-500),#e63946);cursor:pointer;box-shadow:0 10px 22px -10px #e63946aa}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--pink-700);box-shadow:none;font-size:14px;padding:8px}
+.center{text-align:center}
+.intro p{margin:10px 0;line-height:1.5;font-weight:600}
+.big-emoji{font-size:64px;text-align:center;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.result-title{font-family:Fraunces,serif;font-weight:800;font-size:clamp(28px,7vw,36px);color:var(--berry);text-align:center;margin:6px 0}
+.result p{line-height:1.6;font-weight:600;text-align:center;margin-top:10px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.tag{background:var(--pink-100);color:var(--pink-700);border-radius:99px;padding:6px 12px;font-weight:700;font-size:14px}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+footer{text-align:center;margin-top:auto;padding-top:20px;color:var(--pink-700);font-weight:600;font-size:13px}
+</style>
+</head>
+<body>
+<div id="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="garland">🎄❄️💗❄️🎄</div>
+    <h1>What's Your Christmas Aura?</h1>
+    <div class="sub">a cozy little personality quiz ✨</div>
+  </header>
+  <main class="card" id="app"></main>
+  <footer>made with 💗 and too much hot chocolate</footer>
+</div>
+
+<script>
+/* ===== CONFIG =====
+   Results are e-mailed through FormSubmit (formsubmit.co).
+   The FIRST submission triggers an activation e-mail: do one test run yourself first!
+   After activating you can replace the e-mail with the random alias FormSubmit gives you. */
+const SEND_TO = "chrisedwards3006@gmail.com";
+
+/* Weights: E earrings, B bracelet, N necklace, R ring, W watch
+   Style: silver/gold/rose (metal), min/stat (minimal vs statement), clear/color (crystal colour)
+   f = tag used only for the fun result she sees */
+const Q = [
+ {q:"It's a snowy Sunday morning. What's your first move?",o:[
+  ["☕","Blanket, hot chocolate, not moving",{},"cozy"],
+  ["🍪","Baking something that smells like Christmas",{},"festive"],
+  ["⛄","Straight outside into the snow",{},"adv"],
+  ["😴","Snooze until the snow melts",{},"cozy"]]},
+ {q:"You're an elf for a day. Which part of the costume do you keep forever?",o:[
+  ["🧝‍♀️","The pointy ears",{E:3},"festive"],
+  ["🔔","The little jingle-bell cuffs",{B:3},"festive"],
+  ["🎀","The bell collar with the bow",{N:3},"glam"],
+  ["🧦","The striped tights, obviously",{},"adv"]]},
+ {q:"Pick a Christmas tree theme",o:[
+  ["❄️","Silver & icy blue",{silver:3,clear:1},"glam"],
+  ["🎁","Classic gold & red",{gold:3,color:1},"festive"],
+  ["🌸","Rose gold & blush pink",{rose:3},"glam"],
+  ["🌈","Rainbow lights & mismatched ornaments",{color:3},"adv"]]},
+ {q:"Fancy Christmas dinner. Your hair is…",o:[
+  ["👑","In an elegant updo",{E:3,stat:1},"glam"],
+  ["🌊","Down in soft waves",{N:1,B:1,E:-1},"cozy"],
+  ["💫","Sleek ponytail",{E:2,min:1},"glam"],
+  ["🤷‍♀️","Whatever survived the day",{W:1,B:1,min:1},"cozy"]]},
+ {q:"Which Christmas movie are you rewatching this year?",o:[
+  ["🏠","Home Alone",{},"adv"],
+  ["💌","Love Actually",{},"cozy"],
+  ["💚","The Grinch",{},"festive"],
+  ["🧝","Elf",{},"festive"]]},
+ {q:"Your go-to Christmas sweater neckline",o:[
+  ["🧣","Turtleneck, cozy all the way up",{E:2,B:1,N:-2},"cozy"],
+  ["💗","V-neck",{N:3},"glam"],
+  ["⭕","Classic crew neck",{N:1,E:1,min:1},"cozy"],
+  ["✨","Off-the-shoulder",{N:2,E:1,stat:1},"glam"]]},
+ {q:"When you're telling an exciting story, your hands are…",o:[
+  ["🙌","Literally everywhere",{B:2,R:1},"adv"],
+  ["☕","Wrapped around a mug",{R:1},"cozy"],
+  ["💁‍♀️","Playing with my hair",{E:1,N:1},"glam"],
+  ["🧶","Tugging at my sleeves",{B:1,W:1},"cozy"]]},
+ {q:"How do you usually check the time?",o:[
+  ["📱","Phone, always",{W:-2},"cozy"],
+  ["⌚","Quick glance at my wrist",{W:3,B:1},"glam"],
+  ["🙋‍♀️","I ask whoever's next to me",{W:1},"festive"],
+  ["🌙","Time is a concept, I'm free",{W:-1,B:1},"adv"]]},
+ {q:"New Year's Eve outfit, no limits:",o:[
+  ["🖤","Little black dress + one statement piece",{stat:2,N:1,E:1},"glam"],
+  ["🪩","Sequins. Everywhere.",{stat:3,color:1},"glam"],
+  ["🤍","Cozy-chic knit & boots",{min:2},"cozy"],
+  ["👖","Jeans and a really nice top",{min:2,B:1},"adv"]]},
+ {q:"The most satisfying winter sound is…",o:[
+  ["🔥","A crackling fireplace",{},"cozy"],
+  ["🔔","Jingle bells",{},"festive"],
+  ["👢","Fresh snow crunching under boots",{},"adv"],
+  ["🎁","Wrapping paper being ripped open",{},"festive"]]},
+ {q:"Your signature selfie is…",o:[
+  ["😌","Side profile, looking away",{E:3},"glam"],
+  ["😊","Close-up, big smile",{E:1,N:1},"festive"],
+  ["🪞","Mirror pic, full outfit",{N:1,B:1,stat:1},"glam"],
+  ["☕","My hand holding a coffee",{B:2,R:2},"cozy"]]},
+ {q:"Honesty check ✋ Look at your wrists right now. What's there?",o:[
+  ["🎗️","A hair tie (always)",{B:1,min:1},"cozy"],
+  ["⌚","A watch",{W:3},"glam"],
+  ["✨","A bracelet or two",{B:3},"glam"],
+  ["🚫","Nothing, I hate stuff on my wrists",{B:-3,W:-2},"adv"]]},
+ {q:"On the sparkle scale, you are…",o:[
+  ["❄️","A snowflake: subtle shimmer",{min:2,clear:2},"cozy"],
+  ["💡","Fairy lights: a little everywhere",{clear:1,stat:1},"festive"],
+  ["🪩","A disco ball: ALL the sparkle",{stat:3,clear:1},"glam"],
+  ["🕯️","Candlelight: warm and soft",{min:1,gold:2},"cozy"]]},
+ {q:"Your nails, most of the time:",o:[
+  ["💅","Always done, often bright",{R:2,B:1,color:1},"glam"],
+  ["🤍","Neat and natural",{R:1,min:1},"cozy"],
+  ["✂️","Short and practical",{R:-1,B:-1},"adv"],
+  ["🎨","Depends entirely on my mood",{R:1},"festive"]]},
+ {q:"Christmas dinner: which dish do you fight for?",o:[
+  ["🦃","The main roast",{},"festive"],
+  ["🥔","The sides are the real stars",{},"cozy"],
+  ["🍰","Dessert, skip straight to it",{},"glam"],
+  ["🧀","The cheese board at midnight",{},"adv"]]},
+ {q:"When you're a little nervous, you…",o:[
+  ["💍","Twist something around my finger",{R:3},"glam"],
+  ["💁‍♀️","Play with my hair or ears",{E:2},"glam"],
+  ["🥁","Tap my fingers on everything",{R:1,B:1},"adv"],
+  ["😬","Bite my lip",{},"cozy"]]},
+ {q:"Pick the mug for your hot chocolate",o:[
+  ["🥛","Clear glass, so you can see the cream",{clear:3,silver:1},"cozy"],
+  ["🌸","Pastel pink",{rose:3},"glam"],
+  ["❤️","Deep Christmas red",{color:3},"festive"],
+  ["🤍","White with a thin gold rim",{gold:3,min:1},"glam"]]},
+ {q:"Your sweater sleeves are usually…",o:[
+  ["💪","Pushed up to my elbows",{B:2,W:1},"adv"],
+  ["🐾","Pulled over my hands (sweater paws)",{B:-2,W:-1},"cozy"],
+  ["📐","Rolled up neatly",{B:1,W:1,min:1},"glam"],
+  ["☀️","Sleeves? I run warm",{B:1,N:1},"adv"]]},
+ {q:"Which reindeer would be your best friend?",o:[
+  ["🔴","Rudolph",{},"festive"],
+  ["💃","Dancer",{},"glam"],
+  ["⚡","Blitzen",{},"adv"],
+  ["💘","Cupid",{},"cozy"]]},
+ {q:"On a normal Tuesday, your hair is…",o:[
+  ["🎀","Up in a bun or ponytail",{E:2},"adv"],
+  ["🌊","Down",{E:-1,N:1},"cozy"],
+  ["🌗","Half up, half down",{E:1},"glam"],
+  ["🧢","Under a hat, don't ask",{},"adv"]]},
+ {q:"The very last touch before you leave the house:",o:[
+  ["🌹","A spritz of perfume",{N:1},"glam"],
+  ["💄","Lip gloss",{E:1},"glam"],
+  ["💁‍♀️","One final hair flip",{E:2},"festive"],
+  ["⌚","Everything on my wrists and fingers",{B:2,W:1,R:1},"glam"]]},
+ {q:"If you had to insure ONE feature for a million euros…",o:[
+  ["👀","My eyes / my smile",{E:2},"festive"],
+  ["🤲","My hands",{B:2,R:2},"adv"],
+  ["🦢","My collarbones",{N:3},"glam"],
+  ["💇‍♀️","My hair",{E:1},"glam"]]},
+ {q:"You usually arrive…",o:[
+  ["⏰","Early, always",{W:2},"cozy"],
+  ["🎯","Exactly on time",{W:1},"glam"],
+  ["💃","Fashionably late",{W:-1,stat:1},"glam"],
+  ["🍪","Late, but with snacks",{},"festive"]]},
+ {q:"Which ornament goes right at eye level?",o:[
+  ["⭐","A tiny, delicate glass star",{min:2,clear:2},"cozy"],
+  ["🔮","A huge glittery bauble",{stat:3},"glam"],
+  ["🎨","A colourful vintage one",{color:2},"adv"],
+  ["🫶","A handmade one with a story",{N:1,B:1},"cozy"]]},
+ {q:"Dream winter getaway?",o:[
+  ["🏔️","A cabin in the Alps",{},"cozy"],
+  ["🗼","Christmas markets in a big city",{},"festive"],
+  ["🌴","Escape to the sun",{},"adv"],
+  ["🌌","Northern lights in Lapland",{},"adv"]]},
+ {q:"The gifts you end up loving most are the ones you…",o:[
+  ["🔁","Use every single day without thinking",{min:2,B:1,E:1},"cozy"],
+  ["🥂","Save for special nights",{stat:2,N:1},"glam"],
+  ["📸","Want to show everyone",{stat:2},"festive"],
+  ["💭","Remind you of a memory",{N:1,B:1},"cozy"]]},
+ {q:"Getting ready for a Christmas party, what takes you longest?",o:[
+  ["💇‍♀️","Hair",{E:2},"glam"],
+  ["💄","Makeup",{E:1,N:1},"glam"],
+  ["👗","Picking the outfit",{N:1,stat:1},"festive"],
+  ["💅","Nails",{B:2,R:1},"glam"]]},
+ {q:"Winter outfit: which part do you want people to notice?",o:[
+  ["🧥","The coat",{E:1,N:-1},"glam"],
+  ["🧶","The sweater underneath",{N:1},"cozy"],
+  ["👢","The boots",{},"adv"],
+  ["🧣","The big scarf",{N:-2,E:1},"cozy"]]},
+ {q:"Pick a Christmas candle",o:[
+  ["🍦","Vanilla & cashmere",{gold:1,min:1},"cozy"],
+  ["🌿","Peppermint & pine",{silver:1},"festive"],
+  ["🌹","Rose & champagne",{rose:2},"glam"],
+  ["🍎","Cinnamon & baked apple",{gold:1},"cozy"]]},
+ {q:"Last one! If Santa could bring you one small luxury, what would it be?",text:true}
+];
+
+const CATS={E:"Earrings",B:"Bracelet",N:"Necklace / pendant",R:"Ring",W:"Watch"};
+const AURAS={
+ cozy:{t:"Hot Cocoa Heart",e:"☕",d:"You're the warm blanket of Christmas. People feel at home around you, and your idea of magic is fairy lights, a good movie and someone you love next to you.",k:["warm","loyal","comfort queen"]},
+ festive:{t:"Christmas Spirit Elf",e:"🧝‍♀️",d:"You ARE the holiday season. Playlists start in November, the cookies are already planned, and your energy makes everyone around you believe in Santa again.",k:["joyful","generous","pure sparkle"]},
+ adv:{t:"Snow Angel Explorer",e:"⛄",d:"You live Christmas out loud: snowball fights, spontaneous trips and stories nobody else has. Life with you never gets boring.",k:["bold","curious","free spirit"]},
+ glam:{t:"Sugar Plum Sparkle",e:"💖",d:"Elegant, magnetic and effortlessly festive. You turn any ordinary evening into an occasion, and you always look like the main character.",k:["elegant","confident","iconic"]}
+};
+
+let i=0;const ans=[];let wish="";
+const app=document.getElementById("app");
+
+function sky(){const s=document.getElementById("sky");const g=["❄️","💗","❄️","💕","✨","❄️"];
+ for(let k=0;k<26;k++){const f=document.createElement("span");f.className="flake";f.textContent=g[k%g.length];
+  f.style.left=Math.random()*100+"vw";f.style.fontSize=(10+Math.random()*16)+"px";
+  f.style.animationDuration=(8+Math.random()*10)+"s";f.style.animationDelay=(-Math.random()*18)+"s";s.appendChild(f);}}
+
+function intro(){app.innerHTML=`<div class="intro fade center">
+ <div class="big-emoji">🎄</div>
+ <p>30 quick questions, no right or wrong answers.</p>
+ <p>Just go with your gut and find out which Christmas aura you carry this year 💗</p>
+ <button class="btn" id="go">Let's go ✨</button></div>`;
+ document.getElementById("go").onclick=()=>show();}
+
+function show(){
+ const item=Q[i];const pct=Math.round(i/Q.length*100);
+ let body;
+ if(item.text){body=`<textarea id="wish" placeholder="Dream a little… 🎁"></textarea>
+   <button class="btn" id="next">Reveal my aura 🎀</button>
+   <button class="btn ghost" id="skip">Skip</button>`;}
+ else body=`<div class="opts">${item.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="em">${o[0]}</span><span>${o[1]}</span></button>`).join("")}</div>`;
+ app.innerHTML=`<div class="fade"><div class="count">Question ${i+1} of ${Q.length}</div>
+  <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
+  <div class="q">${item.q}</div>${body}
+  ${i>0?'<button class="btn ghost" id="back">← back</button>':''}</div>`;
+ if(item.text){
+  const go=()=>{wish=document.getElementById("wish").value.trim();finish();};
+  document.getElementById("next").onclick=go;
+  document.getElementById("skip").onclick=()=>{wish="";finish();};
+ }else app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  b.classList.add("picked");ans[i]=+b.dataset.k;setTimeout(()=>{i++;show();},220);});
+ const bk=document.getElementById("back");if(bk)bk.onclick=()=>{i--;show();};
+}
+
+function compute(){
+ const raw={},max={};
+ Q.forEach((item,qi)=>{if(item.text)return;
+  const keys=new Set();item.o.forEach(o=>Object.keys(o[2]).forEach(k=>keys.add(k)));
+  keys.forEach(k=>{max[k]=(max[k]||0)+Math.max(0,...item.o.map(o=>o[2][k]||0));});
+  const pick=item.o[ans[qi]];if(!pick)return;
+  for(const[k,v]of Object.entries(pick[2]))raw[k]=(raw[k]||0)+v;});
+ const pct=k=>max[k]?Math.round(Math.max(0,raw[k]||0)/max[k]*100):0;
+ const ranking=Object.keys(CATS).map(k=>({k,name:CATS[k],score:pct(k),raw:raw[k]||0})).sort((a,b)=>b.score-a.score||b.raw-a.raw);
+ const metal=["silver","gold","rose"].map(k=>({k,v:raw[k]||0})).sort((a,b)=>b.v-a.v);
+ const fun={};ans.forEach((a,qi)=>{const o=Q[qi].o&&Q[qi].o[a];if(o)fun[o[3]]=(fun[o[3]]||0)+1;});
+ const aura=Object.entries(fun).sort((a,b)=>b[1]-a[1])[0]?.[0]||"festive";
+ return{ranking,metal,style:{minimal:raw.min||0,statement:raw.stat||0,clear:raw.clear||0,colour:raw.color||0},aura};
+}
+
+function report(r){
+ const metalName={silver:"Silver / white",gold:"Gold",rose:"Rose gold"};
+ const gap=r.ranking[0].score-r.ranking[1].score;
+ const conf=gap>=15?"clear winner":gap>=7?"moderate lead":"close call, treat top 2 as a tie";
+ const lines=r.ranking.map((c,n)=>`${n+1}. ${c.name} — ${c.score}%`).join("\n");
+ const answers=Q.map((item,qi)=>item.text?`Q${qi+1}. ${item.q}\n   → ${wish||"(skipped)"}`:`Q${qi+1}. ${item.q}\n   → ${item.o[ans[qi]]?.[1]??"-"}`).join("\n");
+ return{
+  _subject:"🎁 Gift quiz result: "+r.ranking[0].name,
+  _template:"box",_captcha:"false",
+  "1. Ranking":lines,
+  "2. Confidence":`${conf} (gap ${gap} pts)`,
+  "3. Metal tone":r.metal.map(m=>`${metalName[m.k]} (${m.v})`).join(" > "),
+  "4. Style":`${r.style.minimal>=r.style.statement?"Minimal / delicate":"Statement / sparkly"} (minimal ${r.style.minimal} vs statement ${r.style.statement})`,
+  "5. Crystals":`${r.style.clear>=r.style.colour?"Clear / white crystals":"Coloured crystals"} (clear ${r.style.clear} vs colour ${r.style.colour})`,
+  "6. Her Santa wish":wish||"(skipped)",
+  "7. Aura she was shown":AURAS[r.aura].t,
+  "8. All answers":answers,
+  "Note":"You already gave her a necklace and a ring, so weigh those two lower if they rank high."
+ };
+}
+
+async function send(payload){
+ for(let t=0;t<3;t++){
+  try{const res=await fetch("https://formsubmit.co/ajax/"+SEND_TO,{method:"POST",
+    headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+   if(res.ok)return true;}catch(e){}
+  await new Promise(r=>setTimeout(r,1500*(t+1)));}
+ return false;
+}
+
+function finish(){
+ const r=compute();const a=AURAS[r.aura];
+ send(report(r));
+ app.innerHTML=`<div class="result fade">
+  <div class="count">Your Christmas aura is</div>
+  <div class="big-emoji">${a.e}</div>
+  <div class="result-title">${a.t}</div>
+  <p>${a.d}</p>
+  <div class="tags">${a.k.map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+  <p style="margin-top:18px">Merry Christmas, you deserve all the magic 🎄💗</p></div>`;
+}
+
+sky();intro();
+</script>
+</body>
+</html>
